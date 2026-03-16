@@ -10,51 +10,53 @@ schedule: "0 0 * * *"
 
 # 监控平台（11个核心平台）
 platforms:
-  - weibo
-  - zhihu
-  - douyin
-  - bilibili
-  - toutiao
-  - baidu
-  - cls
-  - wallstreet
-  - sina
-  - netease
-  - github
+  - weibo        # 微博热搜
+  - zhihu        # 知乎热榜
+  - douyin       # 抖音热点
+  - bilibili     # B站热门
+  - toutiao      # 今日头条
+  - baidu        # 百度热搜
+  - cls          # 财联社
+  - wallstreet   # 华尔街见闻
+  - sina         # 新浪新闻
+  - netease      # 网易新闻
+  - github       # GitHub Trending
 
-# 关键词过滤
+# 关键词过滤（按需调整）
 keywords:
-  required: []
-  excluded:
+  required: []      # 必须包含的词
+  excluded:         # 排除的词
     - 广告
     - 推广
-  include: []
+    - 直播带货
+  include: []       # 普通匹配词（为空则推送所有）
 
-# 推送渠道：QQ邮箱
+# 推送渠道：QQ邮箱（现在待命，SMTP开通后自动生效）
 channels:
   email:
-    enabled: true
+    enabled: true                    # 保持开启，SMTP通了就能发
     smtp_server: "smtp.qq.com"
-    smtp_port: 587
+    smtp_port: 587                   # QQ邮箱端口
     username: ${{ secrets.EMAIL_USER }}
-    password: ${{ secrets.EMAIL_PASS }}
+    password: ${{ secrets.EMAIL_PASS }}   # 现在无效，半个月后更新
     to: ${{ secrets.EMAIL_TO }}
     from: "TrendRadar <${{ secrets.EMAIL_USER }}>"
     subject: "[TrendRadar] 每日热点报告 {{date}}"
+    template: "default"
 
-# 其他渠道关闭
+# 备用渠道（全部关闭）
   feishu:
     enabled: false
   telegram:
     enabled: false
 
-# 数据存储
+# 数据存储（保留历史，便于后期AI分析）
 storage:
   enabled: true
   type: sqlite
   path: ./data/trendradar.db
 
-# 日志
+# 日志（排查问题用）
 logging:
   level: INFO
   file: ./logs/trendradar.log
